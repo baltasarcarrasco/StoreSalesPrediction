@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
 
-db_url = 'sqlite:///store_sales.db'
+db_url = 'sqlite:///./store_sales.db'
 engine = create_engine(db_url, pool_pre_ping= True)
 
 SessionLocal = sessionmaker(
@@ -11,7 +11,7 @@ SessionLocal = sessionmaker(
     bind=engine
 )
 
-create_table_sales = text('CREATE TABLE sales (ID VARCHAR(30), DATE DATETIME, STORE_NBR VARCHAR(30), FAMILY VARCHAR(30), SALES FLOAT, ON_PROMOTION INTEGER)')
+create_table_sales = text('CREATE TABLE sales (ID VARCHAR(30), DATE DATETIME, STORE_NBR VARCHAR(30), FAMILY VARCHAR(30), SALES FLOAT, ONPROMOTION INTEGER)')
 create_table_stores = text('CREATE TABLE stores (STORE_NBR VARCHAR(30), CITY VARCHAR(30), STATE VARCHAR(30), TYPE VARCHAR(3), CLUSTER INTEGER)')
 create_table_transactions = text('CREATE TABLE transactions (DATE DATETIME, STORE_NBR VARCHAR(30), TRANSACTIONS BIGINT)')
 create_table_oil = text('CREATE TABLE oil (DATE DATETIME, DCOILWTICO BIGINT)')
@@ -30,7 +30,7 @@ with SessionLocal() as session:
     stores = pd.read_csv(r'./data/stores.csv')
     transactions = pd.read_csv(r'./data/transactions.csv')
     oil = pd.read_csv(r'./data/oil.csv')
-    holidays = pd.read_csv(r'./data/holidays_events.csv', header = 1)
+    holidays = pd.read_csv(r'./data/holidays_events.csv')
 
     dfs_dict = {'sales':sales,
                 'stores':stores,
