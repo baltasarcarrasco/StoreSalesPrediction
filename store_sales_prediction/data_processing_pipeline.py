@@ -31,7 +31,7 @@ def prepare_data(df_sales, df_stores, df_oil):
         df_sales[f'ROLLING_MEAN_{lag}'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
             window=lag).mean()
 
-    # Adjusting seasonal MA components based on your suggestion
+    # Adjusting seasonal MA components
     df_sales['SEASONAL_ROLLING_MEAN_7'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
         window=7).mean()
     df_sales['SEASONAL_ROLLING_MEAN_14'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
