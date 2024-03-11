@@ -2,8 +2,8 @@ import pandas as pd
 import data_reading
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
-stores_data = data_reading('stores')
-sales_raw_data = data_reading('sales')
+stores_data = data_reading.read_table('stores')
+sales_raw_data = data_reading.read_table('sales')
 
 def prepare_data(df_sales, df_stores, df_oil):
     # Merge store information with sales data

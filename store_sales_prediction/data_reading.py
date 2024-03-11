@@ -1,14 +1,21 @@
+import os
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
 
-db_url = 'sqlite:///../store_sales.db'
-engine = create_engine(db_url, pool_pre_ping= True)
+# Calculate the path to the directory ABOVE the current script directory (i.e., the project root)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Construct the absolute path to the database, assuming the database is in the project root
+db_path = os.path.join(PROJECT_ROOT, 'store_sales.db')
+db_url = f'sqlite:///{db_path}'
+
+engine = create_engine(db_url, pool_pre_ping=True)
 
 SessionLocal = sessionmaker(
-    autocommit = False,
-    autoflush= False,
-    bind = engine
+    autocommit=False,
+    autoflush=False,
+    bind=engine
 )
 
 def read_table(table: str):
