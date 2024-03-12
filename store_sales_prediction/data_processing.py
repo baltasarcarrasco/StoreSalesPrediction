@@ -29,7 +29,6 @@ specific_column_types = {
     'DATE': 'DATETIME'
 }
 
-# Iterate over the columns to construct the column definitions with the adjusted types
 for col in columns:
     if col in specific_column_types:
         # Use the specific data type if the column is explicitly defined
@@ -42,11 +41,12 @@ for col in columns:
         col_type = 'INTEGER'
     column_types.append(f"{col} {col_type}")
 
-# Join all column definitions into a single string, maintaining their original order
 columns_sql = ', '.join(column_types)
-
-# Construct the full CREATE TABLE statement
 create_table_sql = f"CREATE TABLE sales_processed ({columns_sql})"
 
 with SessionLocal() as session:
     session.execute(text(create_table_sql))
+    df.to_sql('sales_processed',
+              session.get_bind(),
+              if_exists='append',
+              index=False)
