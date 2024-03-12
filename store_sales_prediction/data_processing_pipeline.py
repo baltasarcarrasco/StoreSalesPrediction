@@ -3,14 +3,16 @@ import data_reading
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
 stores_data = data_reading.read_table('stores')
+holidays_data = data_reading.read_table('holidays')
 sales_raw_data = data_reading.read_table('sales')
 
-def prepare_data(df_sales, df_stores, df_oil):
+def prepare_data(df_sales, df_stores, df_holidays, df_oil = None):
     # Merge store information with sales data
     df_sales = pd.merge(df_sales, df_stores[['STORE_NBR', 'TYPE', 'CLUSTER']], on='STORE_NBR', how='left')
 
-    # Ensure DATE columns are in datetime format for both sales and oil dataframes
+    # Ensure DATE columns are in datetime format
     df_sales['DATE'] = pd.to_datetime(df_sales['DATE'])
+    df_holidays['DATE'] = pd.to_datetime(df_holidays['DATE'])
     #df_oil['DATE'] = pd.to_datetime(df_oil['DATE'])
 
     # Lag oil price by one day
@@ -18,6 +20,14 @@ def prepare_data(df_sales, df_stores, df_oil):
 
     # Merge lagged oil price with sales data
     #df_sales = pd.merge(df_sales, df_oil[['DATE', 'OIL_PRICE_LAG1']], on='DATE', how='left')
+
+    #Merge holidays data
+    df_sales = pd.merge(df_sales,
+                        df_holidays[['DATE', 'LOCALE']],
+                        on = 'DATE',
+                        how = 'left')
+
+    df_sales = df_sales.fillna({'LOCALE': 'No Holiday'})
 
     # Adding lagged sales features
     for lag in range(1, 6):  # 1 to 5 normal lags
@@ -37,6 +47,10 @@ def prepare_data(df_sales, df_stores, df_oil):
     df_sales['SEASONAL_ROLLING_MEAN_14'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
         window=14).mean()
 
+    #Drop NaNs as they correspond to initial dates
+
+    df_sales = df_sales.dropna()
+
     return df_sales
 
 
@@ -46,9 +60,14 @@ def encodings(df):
     store_type_encoder.fit(stores_data[['TYPE']])
     df['TYPE'] = store_type_encoder.transform(df[['TYPE']])
 
+    # Ordinal encoding for holiday type
+    holiday_type_encoder = OrdinalEncoder(categories=[['No Holiday', 'Local', 'Regional', 'National']])
+    holiday_type_encoder.fit(holidays_data[['LOCALE']])
+    df['LOCALE'] = holiday_type_encoder.transform(df[['LOCALE']])
+
     # One-hot encoding for product family
     unique_families = sales_raw_data['FAMILY'].unique().reshape(-1, 1)
-    family_ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
+    family_ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
     family_ohe.fit(unique_families)
 
     family_encoded = family_ohe.transform(df[['FAMILY']])
