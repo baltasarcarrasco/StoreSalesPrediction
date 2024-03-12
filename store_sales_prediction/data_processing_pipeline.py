@@ -38,13 +38,13 @@ def prepare_data(df_sales, df_stores, df_holidays, df_oil = None):
 
     # Adjusted to include rolling means for lags 1 through 5
     for lag in range(1, 6):  # Lags 1 to 5
-        df_sales[f'ROLLING_MEAN_{lag}'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
+        df_sales[f'SALES_ROLLING_MEAN_{lag}'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
             window=lag).mean()
 
     # Adjusting seasonal MA components
-    df_sales['SEASONAL_ROLLING_MEAN_7'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
+    df_sales['SALES_SEASONAL_ROLLING_MEAN_7'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
         window=7).mean()
-    df_sales['SEASONAL_ROLLING_MEAN_14'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
+    df_sales['SALES_SEASONAL_ROLLING_MEAN_14'] = df_sales.groupby(['STORE_NBR', 'FAMILY'])['SALES'].shift(1).rolling(
         window=14).mean()
 
     #Drop NaNs as they correspond to initial dates
