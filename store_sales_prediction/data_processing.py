@@ -30,6 +30,9 @@ specific_column_types = {
 }
 
 for col in columns:
+    # Wrap column names in quotes to handle spaces
+    quoted_col_name = f'"{col}"'  # Add quotes around column names
+
     if col in specific_column_types:
         # Use the specific data type if the column is explicitly defined
         col_type = specific_column_types[col]
@@ -39,10 +42,10 @@ for col in columns:
     else:
         # Default to INTEGER for all other columns
         col_type = 'INTEGER'
-    column_types.append(f"{col} {col_type}")
+    column_types.append(f"{quoted_col_name} {col_type}")
 
 columns_sql = ', '.join(column_types)
-create_table_sql = f"CREATE TABLE sales_processed ({columns_sql})"
+create_table_sql = f"CREATE TABLE sales_processed ({columns_sql});"
 
 with SessionLocal() as session:
     session.execute(text(create_table_sql))
