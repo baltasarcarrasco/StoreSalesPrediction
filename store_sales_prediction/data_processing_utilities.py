@@ -78,7 +78,7 @@ def prepare_data(df_sales, df_stores, df_holidays, df_oil=None):
     return df_sales
 
 
-def encodings(df):
+def encode_data(df):
     # Ordinal encoding for store type
     store_type_encoder = OrdinalEncoder(categories=[["A", "B", "C", "D", "E"]])
     store_type_encoder.fit(stores_data[["type"]])
