@@ -4,7 +4,7 @@ from data_overview import show_data_overview
 from exploratory_data_analysis import show_eda
 from feature_engineering_and_data_processing import show_feature_engineering_page
 from model_training_and_evaluation import show_model_training_evaluation_page
-# from predictions_and_insights import show_predictions
+from predictions_and_insights import show_predictions_and_insights
 # from conclusion import show_conclusion
 from sidebar_controls import create_sidebar_controls  # Step 1
 
@@ -35,10 +35,9 @@ with tab5:
     if apply_changes_btn or not st.session_state:
         show_model_training_evaluation_page(store_nbr, product_family)  # Step 3
 
-# Uncomment these sections as you implement them
-# with tab6:
-#     if apply_changes_btn or not st.session_state:
-#         show_predictions(store_nbr, product_family)
+with tab6:
+    if apply_changes_btn or not st.session_state:
+        show_predictions_and_insights(store_nbr, product_family)
 
 # with tab7:
 #     show_conclusion()
