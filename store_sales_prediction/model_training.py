@@ -1,4 +1,4 @@
-from db_utilities import read_table
+from store_sales_prediction.db_utilities import read_table
 from xgboost import XGBRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
@@ -17,7 +17,6 @@ def train_model(user_requested_model=False, use_xgbooster=True):
     y_train = train_df["sales"]
 
     model = XGBRegressor() if use_xgbooster else RandomForestRegressor()
-
     if not (user_requested_model):
         # Define the time series cross-validation
         tscv = TimeSeriesSplit(n_splits=5)

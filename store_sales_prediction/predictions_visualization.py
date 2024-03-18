@@ -1,5 +1,6 @@
 from store_sales_prediction.db_utilities import read_table
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 def plot_predictions():
@@ -9,22 +10,20 @@ def plot_predictions():
     # Load the predictions
     results_df = read_table("user_sales_predictions")
 
-    # Creating the scatter plot
-    plt.figure(figsize=(8, 8))
-    plt.scatter(results_df["predicted_sales"], results_df["actual_sales"], alpha=0.7)
+    print(results_df.head())
+    # Aggregate the predictions and actual values by date
+    results_df["date"] = pd.to_datetime(results_df["date"])
+    results_df = results_df.groupby("date").agg(
+        {"predicted_sales": "sum", "actual_sales": "sum"}
+    )
 
-    # Adding a line for perfect predictions
-    max_val = max(results_df["predicted_sales"].max(), results_df["actual_sales"].max())
-    plt.plot([0, max_val], [0, max_val], "r--")  # Red dashed line for reference
+    # Plot the predictions and actual values
+    plt.figure(figsize=(10, 5))
+    plt.plot(results_df.index, results_df["predicted_sales"], label="Predictions")
+    plt.plot(results_df.index, results_df["actual_sales"], label="Actual values")
+    plt.xlabel("Date")
+    plt.ylabel("Sales")
+    plt.title("Predictions vs Actual Values")
+    plt.legend()
 
-    # Labels and titles
-    plt.xlabel("Predicted Sales")
-    plt.ylabel("Actual Sales")
-    plt.title("Predicted vs. Actual Sales")
-
-    # Show plot
-    plt.grid(True)
-    plt.axis(
-        "equal"
-    )  # Equal aspect ratio ensures that the line of perfect prediction is at 45 degrees
     plt.show()
