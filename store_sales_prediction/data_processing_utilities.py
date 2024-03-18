@@ -2,12 +2,23 @@ import pandas as pd
 from db_utilities import read_table
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
-stores_data = read_table("stores")
-holidays_data = read_table("holidays")
-sales_raw_data = read_table("sales")
+
+def get_tables():
+    """'
+    This function reads the data from the database and returns the DataFrames for the stores,
+    holidays, and sales tables.
+    """
+    stores_data = read_table("stores")
+    holidays_data = read_table("holidays")
+    sales_raw_data = read_table("sales")
+    return stores_data, holidays_data, sales_raw_data
 
 
 def prepare_data(df_sales, df_stores, df_holidays, df_oil=None):
+    """
+    This function prepares the data for model training by merging the sales, stores, and holidays data.
+    It also adds lagged features to the sales data.
+    """
     # Merge store information with sales data
     df_sales = pd.merge(
         df_sales,
@@ -79,6 +90,11 @@ def prepare_data(df_sales, df_stores, df_holidays, df_oil=None):
 
 
 def encode_data(df):
+    """
+    This function encodes the categorical features of the DataFrame using ordinal encoding for
+    the store type and holiday locale, and one-hot encoding for the product family.
+    """
+    stores_data, holidays_data, sales_raw_data = get_tables()
     # Ordinal encoding for store type
     store_type_encoder = OrdinalEncoder(categories=[["A", "B", "C", "D", "E"]])
     store_type_encoder.fit(stores_data[["type"]])
