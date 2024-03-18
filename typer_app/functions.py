@@ -27,11 +27,17 @@ def train_model():
 
 
 def predict(initial_date, n_days):
+    # Parse the input date
+    initial_date = pd.to_datetime(initial_date)
+
     # Load the saved model
     model = joblib.load("../models/user_model.pkl")
 
     # Load the test data
     test = read_table("sales_test")
+
+    # Convert the date column to datetime format
+    test["date"] = pd.to_datetime(test["date"])
 
     # Filter the test data to include only the specified date range
     test = test[
@@ -47,19 +53,30 @@ def predict(initial_date, n_days):
     y_pred = model.predict(X_test)
 
     # Save predictions and actual values to the database
-    results = pd.DataFrame({"sales_pred": y_pred, "sales_actual": y_test})
+    results = pd.DataFrame({"predicted_sales": y_pred, "actual_sales": y_test})
     write_table(results, "user_sales_predictions")
 
 
 def plot_predictions():
     # Load the predictions
-    results = read_table("user_sales_predictions")
+    results_df = read_table("user_sales_predictions")
 
-    # Plot the predictions and actual values
-    plt.plot(results["sales_pred"], label="Predicted Sales")
-    plt.plot(results["sales_actual"], label="Actual Sales")
+    # Creating the scatter plot
+    plt.figure(figsize=(8, 8))
+    plt.scatter(results_df["predicted_sales"], results_df["actual_sales"], alpha=0.7)
+
+    # Adding a line for perfect predictions
+    max_val = max(results_df["predicted_sales"].max(), results_df["actual_sales"].max())
+    plt.plot([0, max_val], [0, max_val], "r--")  # Red dashed line for reference
+
+    # Labels and titles
     plt.xlabel("Predicted Sales")
     plt.ylabel("Actual Sales")
-    plt.legend()
+    plt.title("Predicted vs. Actual Sales")
 
+    # Show plot
+    plt.grid(True)
+    plt.axis(
+        "equal"
+    )  # Equal aspect ratio ensures that the line of perfect prediction is at 45 degrees
     plt.show()
