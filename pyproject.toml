@@ -23,3 +23,6 @@ typer = "^0.9.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+storesalesprediction = "storesalesprediction.__main__:app"
