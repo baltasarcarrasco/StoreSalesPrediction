@@ -6,11 +6,13 @@ from store_sales_prediction.db_utilities import read_table
 
 df_sales = read_table('sales')
 df_stores = read_table('stores')
+df_holidays = read_table('holidays')
 df_sales['date'] = pd.to_datetime(df_sales['date'])
+df_holidays['date'] = pd.to_datetime(df_holidays['date'])
 
 # Sidebar controls for user input
 st.sidebar.header('User Input Parameters')
-store_options = ['All'] + sorted(df_sales['store_nbr'].unique())
+store_options = ['All'] + sorted(df_stores['store_nbr'].unique())
 product_family_options = ['All'] + sorted(df_sales['family'].unique())
 
 store_nbr = st.sidebar.selectbox('Store Number', options=store_options)
@@ -80,6 +82,47 @@ def show_eda():
     ax.tick_params(labelsize=12)
     plt.xticks(rotation=45)
     plt.tight_layout()
+    st.pyplot(fig)
+
+    # Average Sales by Store Type
+    st.markdown("## Store Characteristics")
+    st.markdown("### Average Sales by Store Type")
+    df_sales_stores = pd.merge(df_sales_filtered, df_stores, on='store_nbr', how='left')
+    sales_by_store_type = df_sales_stores.groupby('type')['sales'].mean().reset_index()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x='type', y='sales', data=sales_by_store_type, ax=ax)
+    ax.set_title('Average Sales by Store Type')
+    st.pyplot(fig)
+
+    # Average Sales by Cluster
+    st.markdown("### Average Sales by Cluster")
+    sales_by_cluster = df_sales_stores.groupby('cluster')['sales'].mean().reset_index()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x='cluster', y='sales', data=sales_by_cluster, ax=ax)
+    ax.set_title('Average Sales by Cluster')
+    plt.xticks(rotation=45)
+    st.pyplot(fig)
+
+    # Holidays Impact on Sales
+    st.markdown("## Holidays Impact on Sales")
+    st.markdown("### Sales on Holidays vs Non-Holidays (Without Outliers)")
+    # Merge holidays information
+    df_sales_holidays = pd.merge(df_sales_filtered, df_holidays[['date', 'locale', 'transferred']], on='date',
+                                 how='left')
+    df_sales_holidays.fillna({'locale': 'No Holiday'}, inplace=True)
+
+    # Aggregate sales by date considering holidays
+    daily_sales_holidays = df_sales_holidays.groupby(['date', 'locale'])['sales'].sum().reset_index()
+
+    # Remove outliers for this specific analysis
+    daily_sales_holidays_filtered = remove_outliers(daily_sales_holidays, 'sales')
+
+    # Plotting
+    fig, ax = plt.subplots()
+    sns.boxplot(x='locale', y='sales', data=daily_sales_holidays_filtered, ax=ax)
+    ax.set_title('Sales on Holidays vs Non-Holidays (Without Outliers)')
     st.pyplot(fig)
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from db_utilities import write_table, read_table
 import joblib
 
 # Load the saved model
-model = joblib.load("../models/store_sales_model.pkl")
+model = joblib.load("./models/store_sales_model.pkl")
 
 # Load the test data
 test = read_table("sales_test")
