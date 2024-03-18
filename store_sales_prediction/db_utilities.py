@@ -29,3 +29,11 @@ def write_table(df: pd.DataFrame, table: str):
     """Writes the specified DataFrame to the specified table in store_sales.db"""
     with SessionLocal() as session:
         df.to_sql(table, session.get_bind(), if_exists="replace", index=False)
+
+
+def custom_query(query: str):
+    with SessionLocal() as session:
+        q = text(query)
+        df = pd.DataFrame(session.execute(q))
+
+    return df
