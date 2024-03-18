@@ -19,10 +19,8 @@ def get_or_create_session():
     """
     global SessionLocal
     if SessionLocal:
-        print("Using existing session")
         return SessionLocal
     else:
-        print("Creating new session")
         engine = create_engine(db_url, pool_pre_ping=True)
         SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
         return SessionLocal

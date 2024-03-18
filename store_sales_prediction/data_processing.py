@@ -1,4 +1,4 @@
-from store_sales_prediction.data_processing_utilities import prepare_data, encode_data
+from data_processing_utilities import prepare_data, encode_data
 from db_utilities import read_table, write_table
 
 

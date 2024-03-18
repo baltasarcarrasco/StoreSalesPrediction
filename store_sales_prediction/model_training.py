@@ -37,7 +37,7 @@ def train_model(user_requested_model=False, use_xgbooster=True):
 
         # Save the best model
         best_model = gsearch.best_estimator_
-        joblib.dump(best_model, "../models/store_sales_model.pkl")
+        joblib.dump(best_model, "./models/store_sales_model.pkl")
     else:
         model.fit(X_train, y_train)
-        joblib.dump(model, "../models/user_model.pkl")
+        joblib.dump(model, "./models/user_model.pkl")

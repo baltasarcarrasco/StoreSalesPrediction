@@ -7,11 +7,11 @@ def ingest_data():
     This function reads the data from the CSV files and writes the DataFrames to the database.
     """
     # Read the data from the CSV files
-    sales = pd.read_csv(r"../data/train.csv")
-    stores = pd.read_csv(r"../data/stores.csv")
-    transactions = pd.read_csv(r"../data/transactions.csv")
-    oil = pd.read_csv(r"../data/oil.csv")
-    holidays = pd.read_csv(r"../data/holidays_events.csv")
+    sales = pd.read_csv(r"./data/train.csv")
+    stores = pd.read_csv(r"./data/stores.csv")
+    transactions = pd.read_csv(r"./data/transactions.csv")
+    oil = pd.read_csv(r"./data/oil.csv")
+    holidays = pd.read_csv(r"./data/holidays_events.csv")
 
     # Write the DataFrames to the database
     write_table(sales, "sales")

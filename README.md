@@ -1,6 +1,19 @@
 # Store Sales Prediction
 
-This project aims to predict store sales using various data sources and machine learning techniques.
+This project aims to predict the sales of a store and a family of products using historical sales data. The project uses a dataset from the [Store Sales - Time Series Forecasting](https://www.kaggle.com/competitions/store-sales-time-series-forecasting/overview) competition on Kaggle. The dataset contains sales data for Favorita stores located in Ecuador. The training data includes dates, store and product information, whether that item was being promoted, as well as the sales numbers. The project uses a time series model to predict the sales of a store and a family of products for the next days. The project also includes a Streamlit app for data visualization and model predictions, and a Typer CLI app for personalized model training and predictions.
+
+## Data Overview
+The dataset was preprocessed in order to capture the most relevant information for the time series model. 
+Our approach includes the following steps:
+    - **Lagged Features**: To capture sales trends and seasonality.
+    - **Rolling Window Features**: To smooth out short-term fluctuations and highlight longer-term trends.
+    - **Encoding Categorical Variables**: To transform categorical variables into a format that can be provided to machine learning algorithms.
+    - **Handling Holidays**: As holidays have a significant impact on sales, we incorporate holiday information into our model.
+    - **Store Information**: Store attributes like type and cluster are included as they can affect sales patterns.
+
+## Model Overview
+
+The model used is an XGBRegressor from the XGBoost library. The model is trained using the first 80% of the data (chronologically ordered) and the sales numbers for the next days are predicted. The model hyperparameters were tuned using a grid search and TimeSeriesSplit cross-validation. The pipeline for creating the model is defined in `store_sales_prediction/store_model_pipeline.py`. The model is saved to the `models/store_sales_model.pkl` file using the joblib library.
 
 ## Project Structure
 
