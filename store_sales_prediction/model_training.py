@@ -1,53 +1,43 @@
-import pandas as pd
-from db_utilities import read_table, write_table
-import pandas as pd
+from db_utilities import read_table
 from xgboost import XGBRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 import joblib
 
-# Read the processed sales data
-df = read_table("sales_processed")
 
-# Ensure the DATE column is in datetime format
-df["date"] = pd.to_datetime(df["date"])
+def train_model(user_requested_model=False, use_xgbooster=True):
+    """
+    This function trains a model to predict store sales. It saves the model to the models directory.
+    """
+    # Read the training data from the database
+    train_df = read_table("sales_train")
 
-# Sort the DataFrame by the DATE column to ensure the split respects the time series order
-df.sort_values("date", inplace=True)
+    # Define the features and target variable
+    X_train = train_df.drop(["id", "date", "sales"], axis=1)
+    y_train = train_df["sales"]
 
-# Split the data into training and testing sets, respecting the time series order
-train = df.iloc[: int(0.8 * len(df))]
-test = df.iloc[int(0.8 * len(df)) :]
+    model = XGBRegressor() if use_xgbooster else RandomForestRegressor()
 
-# Save the training and testing sets to the database
-write_table(train, "sales_train")
-write_table(test, "sales_test")
+    if not (user_requested_model):
+        # Define the time series cross-validation
+        tscv = TimeSeriesSplit(n_splits=5)
 
-# Define the features and target variable
-X_train = train.drop(["id", "date", "sales"], axis=1)
-y_train = train["sales"]
+        # Define the hyperparameter grid
+        param_grid = {
+            "n_estimators": [50, 100, 200],
+            "max_depth": [3, 5, 7],
+            "learning_rate": [0.01, 0.1, 0.3],
+        }
 
-# Define the time series cross-validation
-tscv = TimeSeriesSplit(n_splits=5)
+        # Perform the grid search
+        gsearch = GridSearchCV(estimator=model, cv=tscv, param_grid=param_grid)
 
-# Define the model
-model = XGBRegressor()
+        # Fit the grid search to the training data
+        gsearch.fit(X_train, y_train)
 
-# Define the hyperparameter grid
-param_grid = {
-    "n_estimators": [50, 100, 200],
-    "max_depth": [3, 5, 7],
-    "learning_rate": [0.01, 0.1, 0.3],
-}
-
-# Perform the grid search
-gsearch = GridSearchCV(estimator=model, cv=tscv, param_grid=param_grid)
-
-# Fit the grid search to the training data
-gsearch.fit(X_train, y_train)
-
-# Print the best hyperparameters
-print(gsearch.best_params_)
-
-# Save the best model
-best_model = gsearch.best_estimator_
-joblib.dump(best_model, "../models/store_sales_model.pkl")
+        # Save the best model
+        best_model = gsearch.best_estimator_
+        joblib.dump(best_model, "../models/store_sales_model.pkl")
+    else:
+        model.fit(X_train, y_train)
+        joblib.dump(model, "../models/user_model.pkl")

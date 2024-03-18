@@ -1,5 +1,7 @@
 import typer
-from functions import train_model, predict, plot_predictions
+from store_sales_prediction.model_training import train_model
+from store_sales_prediction.model_evaluation import predict
+from store_sales_prediction.predictions_visualization import plot_predictions
 import pandas as pd
 
 app = typer.Typer(
