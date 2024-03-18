@@ -17,10 +17,18 @@ def train():
     typer.echo("Model trained successfully!")
 
 
-@app.command(
-    help="Makes predictions for a specified date range. Provide the initial date and the number of days to make predictions for. Date format: YYYY-MM-DD. Dates should be within 2016-09-15 and 2017-08-15"
-)
-def make_predictions(initial_date: str, n_days: int):
+@app.command(help="Makes predictions for a specified date range.")
+def make_predictions(
+    initial_date: str = typer.Option(
+        ...,
+        "--start-date",
+        "-s",
+        help="The initial date for making predictions. Format: YYYY-MM-DD. Dates should be within 2016-09-15 and 2017-08-15",
+    ),
+    n_days: int = typer.Option(
+        ..., "--n-days", "-d", help="The number of days to make predictions for."
+    ),
+):
     """
     Makes predictions for a specified date range.
     """
