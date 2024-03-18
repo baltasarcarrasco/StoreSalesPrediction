@@ -4,22 +4,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from store_sales_prediction.db_utilities import read_table
 
-df_sales = read_table('sales')
-df_stores = read_table('stores')
-df_holidays = read_table('holidays')
-df_sales['date'] = pd.to_datetime(df_sales['date'])
-df_holidays['date'] = pd.to_datetime(df_holidays['date'])
-
-# Sidebar controls for user input
-st.sidebar.header('User Input Parameters')
-store_options = ['All'] + sorted(df_stores['store_nbr'].unique())
-product_family_options = ['All'] + sorted(df_sales['family'].unique())
-
-store_nbr = st.sidebar.selectbox('Store Number', options=store_options)
-product_family = st.sidebar.selectbox('Product Family', options=product_family_options)
-
-apply_changes_btn = st.sidebar.button('Apply Changes')
-
 
 # Function to remove outliers from a given DataFrame
 def remove_outliers(df, column='sales'):
@@ -30,26 +14,30 @@ def remove_outliers(df, column='sales'):
     upper_bound = Q3 + 1.5 * IQR
     return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
 
-# Apply filters and remove outliers when "Apply Changes" is clicked
-df_sales_filtered = df_sales.copy()
-if apply_changes_btn:
-    if store_nbr != 'All' and product_family != 'All':
-        df_sales_filtered = df_sales[(df_sales['store_nbr'] == store_nbr) & (df_sales['family'] == product_family)]
-    elif store_nbr != 'All':
-        df_sales_filtered = df_sales[df_sales['store_nbr'] == store_nbr]
-    elif product_family != 'All':
-        df_sales_filtered = df_sales[df_sales['family'] == product_family]
-    else:
-        df_sales_filtered = df_sales.copy()
-
-# Removing outliers only for the sales distribution visualization
-df_sales_filtered_no_outliers = remove_outliers(df_sales_filtered)
-
-def show_eda():
+def show_eda(store_nbr='All', product_family='All', apply_changes_btn=False):
     st.title("Exploratory Data Analysis")
     st.markdown("""
         This section focuses on exploring the sales distribution and trends over time. Use the sidebar controls to filter the sales data by store number and product family. Changes will be applied after clicking the "Apply Changes" button.
     """)
+    df_sales = read_table('sales')
+    df_stores = read_table('stores')
+    df_holidays = read_table('holidays')
+
+    df_sales['date'] = pd.to_datetime(df_sales['date'])
+    df_holidays['date'] = pd.to_datetime(df_holidays['date'])
+
+    # Initialize df_sales_filtered with the original df_sales DataFrame
+    df_sales_filtered = df_sales.copy()
+
+    # Apply filters based on the sidebar selections
+    if apply_changes_btn or True:  # Assuming you want to filter on load as well; adjust as needed
+        if store_nbr != 'All':
+            df_sales_filtered = df_sales_filtered[df_sales_filtered['store_nbr'] == store_nbr]
+        if product_family != 'All':
+            df_sales_filtered = df_sales_filtered[df_sales_filtered['family'] == product_family]
+
+    # Removing outliers only for the sales distribution visualization
+    df_sales_filtered_no_outliers = remove_outliers(df_sales_filtered)
 
     # Distribution Visualization with Outlier Removal
     st.markdown("## Sales Distribution")

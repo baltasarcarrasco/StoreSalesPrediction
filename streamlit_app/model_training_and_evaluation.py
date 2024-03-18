@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, root_mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
 from store_sales_prediction.db_utilities import read_table
 import numpy as np
 import joblib
@@ -13,18 +13,19 @@ def load_data():
     predictions = read_table("sales_predictions")
     sales_raw_data = read_table("sales")
     stores_data = read_table("stores")
-    return test, predictions, sales_raw_data, stores_data
+    general_metrics = read_table("metrics_summary")
+    return test, predictions, sales_raw_data, stores_data, general_metrics
 
 
 def calculate_metrics(y_true, y_pred):
     mse = mean_squared_error(y_true, y_pred)
-    rmse = np.sqrt(mse)
-    mae = np.mean(np.abs(y_true - y_pred))
-    mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+    rmse = root_mean_squared_error(y_true, y_pred)
+    mae = mean_absolute_percentage_error(y_true, y_pred)
+    mape = mean_absolute_percentage_error(y_true, y_pred) * 100
     return mse, rmse, mae, mape
 
 
-def show_model_training_evaluation_page():
+def show_model_training_evaluation_page(store_nbr='All', product_family='All', apply_changes_btn=False):
     st.title("Model Training and Evaluation")
 
     st.markdown("""
@@ -36,7 +37,8 @@ def show_model_training_evaluation_page():
     """)
 
     # Load the data
-    test, predictions, sales_raw_data, stores_data = load_data()
+    test, predictions, sales_raw_data, stores_data, general_metrics = load_data()
+    general_metrics = general_metrics[(general_metrics['metric'] != 'mape')]
     test['date'] = pd.to_datetime(test['date'])
 
     # Map back the original 'family' categories using join on 'id'
@@ -45,39 +47,32 @@ def show_model_training_evaluation_page():
     # Merge test data with predictions
     test_merged = pd.merge(test, predictions, on="id")
 
-    # Calculate regression metrics
-    mse, rmse, mae, mape = calculate_metrics(test_merged['sales_actual'], test_merged['sales_pred'])
-
-    # Display regression metrics
-    st.markdown("### Regression Metrics")
-    st.write(f"Mean Squared Error (MSE): {mse}")
-    st.write(f"Root Mean Squared Error (RMSE): {rmse}")
-    st.write(f"Mean Absolute Error (MAE): {mae}")
-    st.write(f"Mean Absolute Percentage Error (MAPE): {mape}%")
-
-    # Sidebar controls for user input
-    st.sidebar.header('User Input Parameters')
-    store_options = ['All'] + sorted(stores_data['store_nbr'].unique())
-    product_family_options = ['All'] + sorted(sales_raw_data['family'].unique())
-
-    store_nbr = st.sidebar.selectbox('Store Number', options=store_options)
-    product_family = st.sidebar.selectbox('Product Family', options=product_family_options)
-
-    # Apply filters based on sidebar selections
-    filtered_test = test
+    # Adjust for global sidebar control
+    filtered_test = test_merged.copy()
     if store_nbr != 'All':
         filtered_test = filtered_test[filtered_test['store_nbr'] == store_nbr]
     if product_family != 'All':
         filtered_test = filtered_test[filtered_test['family'] == product_family]
 
-    # Merge filtered test data with predictions
-    filtered_test_merged = pd.merge(filtered_test, predictions, on="id")
+    # Display regression metrics using the general_metrics df
+    st.markdown("### Regression Metrics")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("#### Training Set Metrics")
+        for index, row in general_metrics.iterrows():
+            st.write(f"{row['metric'].upper()}: {row['train']:,.2f}")
+
+    with col2:
+        st.markdown("#### Testing Set Metrics")
+        for index, row in general_metrics.iterrows():
+            st.write(f"{row['metric'].upper()}: {row['test']:,.2f}")
 
     # Plotting actual vs. predicted sales
     st.markdown("### Actual vs. Predicted Sales")
     # Aggregate sales by date
-    agg_sales = filtered_test_merged.groupby('date').agg(sales_actual=('sales_actual', 'sum'),
-                                                         sales_pred=('sales_pred', 'sum')).reset_index()
+    agg_sales = filtered_test.groupby('date').agg(sales_actual=('sales_actual', 'sum'),
+                                                  sales_pred=('sales_pred', 'sum')).reset_index()
 
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.plot(agg_sales['date'], agg_sales['sales_actual'], label='Actual Sales', color='blue', linestyle='-',
