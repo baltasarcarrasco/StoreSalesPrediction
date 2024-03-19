@@ -4,12 +4,12 @@ This project aims to predict the sales of a store and a family of products using
 
 ## Data Overview
 The dataset was preprocessed in order to capture the most relevant information for the time series model. 
-Our approach includes the following steps:
-    - **Lagged Features**: To capture sales trends and seasonality.
-    - **Rolling Window Features**: To smooth out short-term fluctuations and highlight longer-term trends.
-    - **Encoding Categorical Variables**: To transform categorical variables into a format that can be provided to machine learning algorithms.
-    - **Handling Holidays**: As holidays have a significant impact on sales, we incorporate holiday information into our model.
-    - **Store Information**: Store attributes like type and cluster are included as they can affect sales patterns.
+Our approach includes the following steps:  
+    - **Lagged Features**: To capture sales trends and seasonality.  
+    - **Rolling Window Features**: To smooth out short-term fluctuations and highlight longer-term trends.  
+    - **Encoding Categorical Variables**: To transform categorical variables into a format that can be provided to machine learning algorithms.  
+    - **Handling Holidays**: As holidays have a significant impact on sales, we incorporate holiday information into our model.  
+    - **Store Information**: Store attributes like type and cluster are included as they can affect sales patterns.  
 
 ## Model Overview
 
@@ -22,7 +22,7 @@ The model used is an XGBRegressor from the XGBoost library. The model is trained
 - `notebooks/`: Contains Jupyter notebooks for exploratory data analysis.
 - `store_sales_prediction/`: Contains Python scripts for data ingestion, processing, model training, and evaluation.
 - `streamlit_app/`: Contains Streamlit app for data visualization and model predictions.
-- `typer_app/`: Contains Typer CLI app for model training and predictions.
+- `cli/`: Contains Typer CLI app for model training and predictions.
 
 ## Dependencies
 
@@ -51,7 +51,7 @@ streamlit run streamlit_app/app.py
 or the Typer app:
 
 ```sh
-python typer_app/app.py
+store_sales_prediction
 ```
 
 ## Usage
@@ -68,19 +68,19 @@ The Typer app provides a command line interface for training the model and makin
 To train the model, run:
 
 ```sh
-python typer_app/app.py train
+store_sales_prediction train [--xgboost]
 ```
 
 To make predictions, run:
 
 ```sh
-python typer_app/app.py make-predictions --start-date [start_date] --n-days [n_days]
+store_sales_prediction make-predictions --start-date [start_date] --n-days [n_days]
 ```
 
 To plot the sales predictions vs actual sales, run:
 
 ```sh
-python typer_app/app.py plot
+store_sales_prediction plot
 ```
 
 
