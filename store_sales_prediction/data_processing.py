@@ -5,7 +5,6 @@ from db_utilities import read_table, write_table
 def process_data():
     stores_df = read_table("stores")
     sales_df = read_table("sales")
-    oil_df = read_table("oil")
     holidays_df = read_table("holidays")
 
     # Prepare and encode the data
