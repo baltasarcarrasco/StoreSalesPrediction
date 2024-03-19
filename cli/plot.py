@@ -1,13 +1,13 @@
-import typer
+from typer import Typer, echo
 from StoreSalesPrediction.predictions_visualization import plot_predictions
 
-app = typer.Typer()
+# app = Typer()
 
 
-@app.command(help="Plots the predictions and actual values.")
+# @app.command(help="Plots the predictions and actual values.")
 def plot():
     """
     Plots the predictions and actual values.
     """
-    typer.echo("Plotting predictions...")
+    echo("Plotting predictions...")
     plot_predictions()

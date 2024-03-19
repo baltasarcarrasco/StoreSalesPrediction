@@ -1,12 +1,12 @@
-import typer
+from typer import Typer, echo, Option
 from StoreSalesPrediction.model_training import train_model
 
-app = typer.Typer()
+app = Typer()
 
 
 @app.command(help="Trains the sales prediction model.")
 def train(
-    use_xgbooster: bool = typer.Option(
+    use_xgbooster: bool = Option(
         ...,
         "--xgboost",
         "-x",
@@ -16,6 +16,6 @@ def train(
     """
     Trains the sales prediction model.
     """
-    typer.echo("Training the model...")
+    echo("Training the model...")
     train_model(user_requested_model=True, use_xgbooster=use_xgbooster)
-    typer.echo("Model trained successfully!")
+    echo("Model trained successfully!")

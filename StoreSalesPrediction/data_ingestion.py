@@ -1,5 +1,5 @@
 import pandas as pd
-from db_utilities import write_table
+from StoreSalesPrediction.db_utilities import write_table
 
 
 def ingest_data():
