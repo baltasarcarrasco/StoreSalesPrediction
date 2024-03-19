@@ -1,5 +1,5 @@
 import pandas as pd
-from StoreSalesPrediction.db_utilities import write_table, read_table
+from store_sales_prediction.db_utilities import write_table, read_table
 from sklearn.metrics import (
     mean_squared_error,
     # root_mean_squared_error,

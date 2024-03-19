@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from StoreSalesPrediction.db_utilities import read_table
+from store_sales_prediction.db_utilities import read_table
 
 
 # Function to remove outliers from a given DataFrame

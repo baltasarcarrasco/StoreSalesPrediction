@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "storesalesprediction"
+name = "store_sales_prediction"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]

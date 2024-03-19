@@ -1,5 +1,5 @@
 from typer import Typer, echo, Option
-from StoreSalesPrediction.model_evaluation import predict
+from store_sales_prediction.model_evaluation import predict
 
 app = Typer()
 

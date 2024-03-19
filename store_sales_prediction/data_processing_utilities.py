@@ -1,5 +1,5 @@
 import pandas as pd
-from StoreSalesPrediction.db_utilities import read_table
+from store_sales_prediction.db_utilities import read_table
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
 

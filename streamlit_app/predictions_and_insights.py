@@ -1,8 +1,8 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
-from StoreSalesPrediction.db_utilities import read_table
-from StoreSalesPrediction.data_processing_utilities import prepare_data, encode_data
+from store_sales_prediction.db_utilities import read_table
+from store_sales_prediction.data_processing_utilities import prepare_data, encode_data
 import matplotlib.pyplot as plt
 import joblib
 

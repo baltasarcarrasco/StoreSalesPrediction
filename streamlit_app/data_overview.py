@@ -1,12 +1,8 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import sys
-
-print(sys.path)
-from StoreSalesPrediction.db_utilities import read_table
+from store_sales_prediction.db_utilities import read_table
 
 
 def show_data_overview():

@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-from StoreSalesPrediction.db_utilities import read_table, custom_query
+from store_sales_prediction.db_utilities import read_table, custom_query
 
 df_sales = read_table("sales")
 df_sales["date"] = pd.to_datetime(df_sales["date"])

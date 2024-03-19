@@ -1,5 +1,5 @@
 import streamlit as st
-from StoreSalesPrediction.db_utilities import read_table
+from store_sales_prediction.db_utilities import read_table
 
 df_stores = read_table("stores")
 df_sales = read_table("sales")

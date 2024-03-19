@@ -8,7 +8,7 @@ from sklearn.metrics import (
     mean_absolute_error,
     mean_absolute_percentage_error,
 )
-from StoreSalesPrediction.db_utilities import read_table
+from store_sales_prediction.db_utilities import read_table
 import numpy as np
 import joblib
 
