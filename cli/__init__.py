@@ -2,10 +2,6 @@
 **CLI access point**.
 """
 
-import sys
-
-sys.path.append("C:\\Users\\balta\\OneDrive\\Escritorio\\StoreSalesPrediction")
-sys.path.append("C:\\Users\\balta\\OneDrive\\Escritorio")
 from typer import Typer
 
 
