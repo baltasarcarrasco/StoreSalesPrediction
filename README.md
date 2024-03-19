@@ -2,7 +2,7 @@
 
 This project aims to predict the sales of a store and a family of products using historical sales data. The project uses a dataset from the [Store Sales - Time Series Forecasting](https://www.kaggle.com/competitions/store-sales-time-series-forecasting/overview) competition on Kaggle. The dataset contains sales data for Favorita stores located in Ecuador. The training data includes dates, store and product information, whether that item was being promoted, as well as the sales numbers. The project uses a time series model to predict the sales of a store and a family of products for the next days. The project also includes a Streamlit app for data visualization and model predictions, and a Typer CLI app for personalized model training and predictions.
 
-## Data Overview
+## Data Processing
 The dataset was preprocessed in order to capture the most relevant information for the time series model. 
 Our approach includes the following steps:  
     - **Lagged Features**: To capture sales trends and seasonality.  
