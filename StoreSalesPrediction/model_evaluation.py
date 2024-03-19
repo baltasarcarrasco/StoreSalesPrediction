@@ -1,8 +1,8 @@
 import pandas as pd
-from db_utilities import write_table, read_table
+from StoreSalesPrediction.db_utilities import write_table, read_table
 from sklearn.metrics import (
     mean_squared_error,
-    root_mean_squared_error,
+    # root_mean_squared_error,
     mean_absolute_error,
     mean_absolute_percentage_error,
 )
@@ -15,7 +15,7 @@ def evaluate_model():
     """
     eval_metrics = {
         "mse": mean_squared_error,
-        "rmse": root_mean_squared_error,
+        # "rmse": root_mean_squared_error,
         "mae": mean_absolute_error,
         "mape": mean_absolute_percentage_error,
     }
@@ -53,8 +53,6 @@ def evaluate_model():
         {"metric": metrics_list, "train": train_scores, "test": test_scores}
     )
 
-    # rmse = mean_squared_error(y_test, y_pred, squared=False)
-
     # Save predictions, actual values and metrics to the database
     results = pd.DataFrame(
         {"id": test["id"], "sales_pred": y_pred, "sales_actual": y_test}
@@ -75,7 +73,7 @@ def predict(initial_date, n_days):
     initial_date = pd.to_datetime(initial_date)
 
     # Load the saved model
-    model = joblib.load("../models/user_model.pkl")
+    model = joblib.load("./models/user_model.pkl")
 
     # Load the test data
     test = read_table("sales_test")
@@ -97,5 +95,7 @@ def predict(initial_date, n_days):
     y_pred = model.predict(X_test)
 
     # Save predictions and actual values to the database
-    results = pd.DataFrame({"predicted_sales": y_pred, "actual_sales": y_test})
+    results = pd.DataFrame(
+        {"date": test["date"], "predicted_sales": y_pred, "actual_sales": y_test}
+    )
     write_table(results, "user_sales_predictions")

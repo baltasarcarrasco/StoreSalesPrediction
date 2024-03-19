@@ -1,5 +1,5 @@
 import typer
-from store_sales_prediction.model_evaluation import predict
+from StoreSalesPrediction.model_evaluation import predict
 
 app = typer.Typer()
 

@@ -1,5 +1,5 @@
 import typer
-from store_sales_prediction.predictions_visualization import plot_predictions
+from StoreSalesPrediction.predictions_visualization import plot_predictions
 
 app = typer.Typer()
 

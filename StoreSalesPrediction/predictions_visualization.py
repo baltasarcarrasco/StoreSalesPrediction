@@ -1,4 +1,4 @@
-from store_sales_prediction.db_utilities import read_table
+from StoreSalesPrediction.db_utilities import read_table
 import matplotlib.pyplot as plt
 import pandas as pd
 
