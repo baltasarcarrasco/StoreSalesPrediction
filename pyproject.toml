@@ -25,4 +25,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-StoreSalesPrediction = "StoreSalesPrediction.__main__:app"
+store_sales_prediction = "store_sales_prediction.__main__:app"
