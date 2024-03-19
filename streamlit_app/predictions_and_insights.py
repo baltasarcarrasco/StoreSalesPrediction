@@ -1,167 +1,73 @@
 import streamlit as st
-from datetime import datetime, timedelta
 import pandas as pd
-from store_sales_prediction.db_utilities import read_table
-from store_sales_prediction.data_processing_utilities import prepare_data, encode_data
 import matplotlib.pyplot as plt
+import seaborn as sns
 import joblib
+from store_sales_prediction.db_utilities import read_table
+from sidebar_controls import create_sidebar_controls
 
-
-def iterative_predictions(model, sales_df, input_date, store="All", family="All"):
-    stores_df = read_table("stores")
-    holidays_df = read_table("holidays")
-
-    last_date = sales_df["date"].max()
-    input_date = datetime.strptime(
-        input_date, "%Y-%m-%d"
-    )  # Assuming input_date is a string
-
-    while last_date < input_date:
-        last_date += timedelta(days=1)  # Predict for the next day
-        df_temporary = sales_df.copy()
-
-        # Filter the temporary DataFrame for the last 15 days for feature generation
-        df_temporary = df_temporary[
-            df_temporary["date"] >= last_date + timedelta(days=-15)
-        ]
-
-        if store != "All" or family != "All":
-            # Filter by store and family if specified
-            if store != "All":
-                df_temporary = df_temporary[df_temporary["store_nbr"] == store]
-            if family != "All":
-                df_temporary = df_temporary[df_temporary["family"] == family]
-
-        # Prepare a new row for each combination of store and family
-        new_rows = []
-        if store == "All" and family == "All":
-            store_family_combinations = [
-                (store, family)
-                for store in sales_df["store_nbr"].unique()
-                for family in sales_df["family"].unique()
-            ]
-        elif store == "All":
-            store_family_combinations = [
-                (store, family) for store in sales_df["store_nbr"].unique()
-            ]
-        elif family == "All":
-            store_family_combinations = [
-                (store, family) for family in sales_df["family"].unique()
-            ]
-        else:
-            store_family_combinations = [(store, family)]
-
-        for store, family in store_family_combinations:
-            new_rows.append(
-                {
-                    "date": last_date,
-                    "store_nbr": store,
-                    "family": family,
-                    "sales": 0,
-                    "onpromotion": 0,
-                }
-            )  # Assume 'onpromotion' is a required feature; adjust as necessary
-
-        df_new_rows = pd.DataFrame(new_rows)
-        df_temporary = pd.concat([df_temporary, df_new_rows], ignore_index=True)
-
-        df_temporary = prepare_data(
-            df_sales=df_temporary, df_stores=stores_df, df_holidays=holidays_df
-        )
-        family_column = df_temporary["family"]
-        df_temporary = encode_data(df_temporary)
-        df_temporary["family"] = family_column
-
-        for _, row in df_new_rows.iterrows():
-            input_ready = df_temporary[
-                (df_temporary["date"] == last_date)
-                & (df_temporary["store_nbr"] == row["store_nbr"])
-                & (df_temporary["family"] == row["family"])
-            ]
-            input_ready = input_ready.drop(
-                ["date", "sales", "family"], axis=1
-            )  # Drop non-feature columns; adjust as needed
-            predicted_sales = model.predict(input_ready)
-            # Update the original sales_df with the predicted sales
-            sales_df = sales_df.append(
-                {
-                    "date": last_date,
-                    "store_nbr": row["store_nbr"],
-                    "family": row["family"],
-                    "sales": predicted_sales[0],
-                },
-                ignore_index=True,
-            )
-
-    # Return the updated sales_df with predictions
-    return sales_df
-
-
-def show_predictions_and_insights(
-    store_nbr="All", product_family="All", apply_changes_btn=False
-):
+def show_predictions_and_insights(store_nbr, product_family, apply_changes_btn=False):
     st.title("Predictions and Insights")
+    st.markdown("""
+    This section visualizes both actual sales data for the last 30 days and predicted sales up to December 31, 2017. Use the sidebar controls to filter data by store number and product family.
+    """)
 
-    # Load necessary data
     model = joblib.load("./models/store_sales_model.pkl")
-    sales_df = read_table("sales")
-    sales_df["date"] = pd.to_datetime(sales_df["date"])
-    last_date = sales_df["date"].max()
+    print('model_loaded')
+    actual_sales_df = read_table('sales')
+    print('sales_read')
+    predicted_sales_df = read_table('predicted_sales')
+    print('predictions_read')
+    actual_sales_df = actual_sales_df[['id', 'date', 'store_nbr', 'family']]
+    actual_sales_df['type'] = 'Actual'
+    print('select columns')
+    actual_sales_df['date'] = pd.to_datetime(actual_sales_df['date'])
+    predicted_sales_df['date'] = pd.to_datetime(predicted_sales_df['date'])
+    df = pd.concat([actual_sales_df, predicted_sales_df])
+    print('concat done')
 
-    # User input for prediction date, placed directly in the page
-    prediction_date = st.date_input(
-        "Enter prediction end date",
-        value=(last_date + timedelta(days=15)),
-        min_value=(last_date + timedelta(days=1)),
-    )
 
-    if apply_changes_btn or True:  # Check if "Apply Changes" is clicked
-        # Ensure user has selected a future date
-        if prediction_date <= last_date.date():
-            st.warning("Please select a date after the last available data date.")
-            return
+    # Sidebar input for date selection
+    prediction_date = st.date_input("Select a date for prediction", value = actual_sales_df['date'].max() + pd.Timedelta(days=1),min_value=actual_sales_df['date'].max() + pd.Timedelta(days=1),
+                                    max_value=pd.to_datetime('2017-08-18'))
 
-        # Call the iterative prediction function
-        predicted_sales_df = iterative_predictions(
-            model,
-            sales_df,
-            prediction_date.strftime("%Y-%m-%d"),
-            store_nbr,
-            product_family,
-        )
+    if apply_changes_btn or True:
+        # Filtering based on sidebar controls
+        if store_nbr != 'All':
+            df = df[df['store_nbr'] == store_nbr]
+        if product_family != 'All':
+            df = df[df['family'] == product_family]
 
-        # Filter the DataFrame for the last 15 days and the prediction period
-        plot_data = predicted_sales_df[
-            (predicted_sales_df["date"] > last_date - timedelta(days=15))
-            & (predicted_sales_df["date"] <= prediction_date)
-        ]
-
-        if store_nbr != "All":
-            plot_data = plot_data[plot_data["store_nbr"] == store_nbr]
-        if product_family != "All":
-            plot_data = plot_data[plot_data["family"] == product_family]
-
-        # Plotting
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.plot(
-            plot_data[plot_data["date"] <= last_date]["date"],
-            plot_data[plot_data["date"] <= last_date]["sales"],
-            label="Actual Sales",
-            color="blue",
-        )
-        ax.plot(
-            plot_data[plot_data["date"] > last_date]["date"],
-            plot_data[plot_data["date"] > last_date]["sales"],
-            label="Predicted Sales",
-            color="red",
-            linestyle="--",
-        )
-        ax.set_title("Sales Predictions")
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Sales")
-        ax.legend()
+        # Time series plot
+        fig, ax = plt.subplots()
+        # Actual sales
+        actual_sales = df[df['type'] == 'Actual']
+        sns.lineplot(data=actual_sales, x='date', y='sales', ax=ax, label='Actual Sales', color='blue')
+        # Predicted sales
+        predicted_sales = df[(df['type'] == 'Predicted') & (df['date'] <= prediction_date)]
+        sns.lineplot(data=predicted_sales, x='date', y='sales', ax=ax, label='Predicted Sales', color='red', linestyle='--')
+        plt.title('Sales Forecast')
+        plt.xlabel('Date')
+        plt.ylabel('Sales')
+        plt.legend()
         st.pyplot(fig)
 
+        # Feature importance (if applicable)
+        if hasattr(model, 'feature_importances_'):
+            st.markdown("### Feature Importance")
+            features = pd.DataFrame({'Feature': df.columns.drop(['id', 'date', 'store_nbr', 'family', 'sales', 'type']),
+                                     'Importance': model.feature_importances_})
+            features.sort_values(by='Importance', ascending=True, inplace=True)
+            plt.figure(figsize=(10, 6))
+            sns.barplot(x='Importance', y='Feature', data=features)
+            plt.title('Feature Importance')
+            plt.xlabel('Importance')
+            plt.ylabel('Features')
+            st.pyplot()
 
 if __name__ == "__main__":
-    show_predictions_and_insights()  # These parameters should be set based on the global sidebar inputs
+    # Assuming create_sidebar_controls returns (store_nbr, product_family, apply_changes_btn)
+    store_nbr, product_family, apply_changes_btn = create_sidebar_controls()
+    show_predictions_and_insights(store_nbr, product_family, apply_changes_btn)
+
+
