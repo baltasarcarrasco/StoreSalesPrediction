@@ -59,8 +59,24 @@ store_sales_prediction
 The Streamlit app allows users to visualize the data and make predictions using the trained model. The Typer app allows users to train the model and make predictions using the command line.
 
 ### Streamlit App
-... Diego
 
+The Streamlit app provides an interactive interface for exploring the data and visualizing the model's predictions. It is structured into various pages, each focusing on a different aspect of the data and predictions:
+
+- **Introduction**: Gives a brief overview of the project and its objectives.
+- **Data Overview**: Displays the raw data and its characteristics, allowing users to understand the dataset used for modeling.
+- **Exploratory Data Analysis (EDA)**: Offers detailed insights into the sales data, enabling users to explore trends, patterns, and relationships.
+- **Feature Engineering & Data Processing**: Explains the steps taken to prepare the data for modeling, including feature engineering and encoding.
+- **Model Training & Evaluation**: Details the modeling process, including hyperparameter tuning and model evaluation, with metrics to assess the model's performance.
+- **Predictions & Insights**: Enables users to input a future date and visualize the model's sales predictions up to that date, alongside the actual sales data for the last 30 days. This page uses a combination of user input from sidebar controls and a date input widget to filter data and generate predictions.
+- **Conclusions**: (Under Development) This section will summarize the key findings from the exploratory data analysis, feature engineering, model performance, and predictions. It will also discuss the implications of the findings, potential improvements for the model, and future directions for this project.
+
+The app also integrates global sidebar controls for filtering data based on store number and product family across different pages, enhancing the user experience and providing consistent analysis criteria throughout the application.
+
+To run the Streamlit app, navigate to the `streamlit_app` directory and execute the command:
+
+```sh
+streamlit run streamlit_app/app.py
+```
 ### Typer App
 
 The Typer app provides a command line interface for training the model and making predictions. The app has three commands: `train`, `make-predictions` and `plot`.
