@@ -104,7 +104,7 @@ def show_model_training_evaluation_page(
         linewidth=2,
     )
     ax.set_title(
-        f'Actual vs. Predicted Sales {"- Store: " + store_nbr if store_nbr != "All" else ""} {"- Family: " + product_family if product_family != "All" else ""}'
+        f'Actual vs. Predicted Sales {"- Store: " + str(store_nbr) if str(store_nbr) != "All" else ""} {"- Family: " + product_family if product_family != "All" else ""}'
     )
     ax.set_xlabel("Date")
     ax.set_ylabel("Sales")
