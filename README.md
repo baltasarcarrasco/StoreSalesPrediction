@@ -30,7 +30,7 @@ The model used is an XGBRegressor from the XGBoost library. The model is trained
 
 The project uses several Python libraries like pandas, sqlalchemy, jupyter, matplotlib, seaborn, statsmodels, scikit-learn, streamlit, xgboost, joblib, and typer. The exact versions of these libraries are specified in the `pyproject.toml` and `poetry.lock` files.
 
-## Setup
+### Setup
 
 To set up the project, first install the dependencies using Poetry:
 
@@ -43,18 +43,30 @@ Then, activate the virtual environment:
 ```sh
 poetry shell
 ```
+## Initial Data Setup for Cloned Repositories
 
-Finally, run the Streamlit app:
+If you've cloned this repository directly from GitHub, please note that the content of the database (`store_sales.db`) and the raw data file (`train.csv`) used for data ingestion and processing are not included due to file size limitations on GitHub. To fully utilize this project, including running the CLI and Streamlit app, you'll need to manually add these files to your local setup.
+
+### Adding the Raw Data File
+
+1. Download the `train.csv` file from this [link](https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data).
+2. Place the downloaded `train.csv` file into the `data/` directory of your local project.
+
+### Populating the Database
+
+Once you have the `train.csv` file in place, you need to populate the `store_sales.db` database:
+
+1. Run the `store_model_pipeline.py` script to process the raw data and populate the database:
 
 ```sh
-streamlit run streamlit_app/app.py
+python store_sales_prediction/store_model_pipeline.py
 ```
 
-or the Typer app:
+This will fill the `store_sales.db` database with the necessary tables and data required for the project.
 
-```sh
-store_sales_prediction
-```
+### Running the CLI and Streamlit App
+
+After completing the above steps, the database should be populated with the necessary data. You're now ready to use the Typer CLI app and the Streamlit web app. Follow the setup instructions in the following sections of this README to get started.
 
 ## Usage
 
@@ -82,6 +94,11 @@ streamlit run streamlit_app/app.py
 
 The Typer app provides a command line interface for training the model and making predictions. The app has three commands: `train`, `make-predictions` and `plot`.
 
+To run the app in a standalone way:
+
+```sh
+store_sales_prediction
+```
 To train the model, run:
 
 ```sh
@@ -99,5 +116,3 @@ To plot the sales predictions vs actual sales, run:
 ```sh
 store_sales_prediction plot
 ```
-
-
