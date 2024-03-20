@@ -11,15 +11,14 @@ from sidebar_controls import create_sidebar_controls
 store_nbr, product_family = create_sidebar_controls()
 
 # Create tabs for each section of the app
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
+tab1, tab2, tab3, tab4, tab5, tab6= st.tabs(
     [
         "Introduction",
         "Data Overview",
         "Exploratory Data Analysis",
         "Feature Engineering & Data Processing",
         "Model Training & Evaluation",
-        "Predictions & Insights",
-        "Conclusion",
+        "Predictions & Insights"
     ]
 )
 

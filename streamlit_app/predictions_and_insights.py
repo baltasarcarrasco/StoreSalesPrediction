@@ -148,14 +148,15 @@ def show_predictions_and_insights(store_nbr, product_family):
         # Feature importance
         if hasattr(model, "feature_importances_"):
             st.markdown(
-                """### Feature Importance
+            """
+            ### Feature Importance
                 
-                - The **`sales_seasonal_rolling_mean_7`** emerges as the most influential feature, significantly outpacing others. This highlights the importance of short-term historical sales trends and their impact on forecasting accuracy. The 7-day rolling mean effectively captures weekly sales patterns, which are crucial for understanding consumer behavior and demand fluctuations.
-                - **Past sales variables** like **`sales_lag_1`**, **`sales_seasonal_lag_1`**, **`rolling mean 3`**, and **`rolling mean 2`** are among the top influencers. This underscores the predictive power of recent sales data in forecasting future sales. These features help the model capture immediate sales dynamics and trends, which are predictive of near-future performance.
-                - The significance of **`lag 5`** suggests that sales data from five days ago also have a meaningful impact on future sales predictions, pointing to specific weekly patterns or consumer purchasing cycles that affect sales.
-                - **`Store`** and **`on promotion`** features indicate that geographical location and promotional activities are also key drivers of sales. These factors account for external influences on consumer purchasing decisions, emphasizing the need for targeted marketing and inventory planning.
-                - The **`locale`** feature's importance reveals the effect of holidays on consumer purchasing behavior. This suggests that sales are not only influenced by regular patterns but also by seasonal events and holidays, which can significantly alter consumer demand.
-                       """ )
+            - The **`sales_seasonal_rolling_mean_7`** emerges as the most influential feature, significantly outpacing others. This highlights the importance of short-term historical sales trends and their impact on forecasting accuracy. The 7-day rolling mean effectively captures weekly sales patterns, which are crucial for understanding consumer behavior and demand fluctuations.
+            - **Past sales variables** like **`sales_lag_1`**, **`sales_seasonal_lag_1`**, **`rolling mean 3`**, and **`rolling mean 2`** are among the top influencers. This underscores the predictive power of recent sales data in forecasting future sales. These features help the model capture immediate sales dynamics and trends, which are predictive of near-future performance.
+            - The significance of **`lag 5`** suggests that sales data from five days ago also have a meaningful impact on future sales predictions, pointing to specific weekly patterns or consumer purchasing cycles that affect sales.
+            - **`Store`** and **`on promotion`** features indicate that geographical location and promotional activities are also key drivers of sales. These factors account for external influences on consumer purchasing decisions, emphasizing the need for targeted marketing and inventory planning.
+            - The **`locale`** feature's importance reveals the effect of holidays on consumer purchasing behavior. This suggests that sales are not only influenced by regular patterns but also by seasonal events and holidays, which can significantly alter consumer demand.
+            """ )
             feature_names = model.get_booster().feature_names
             feature_importances = model.feature_importances_
             features = pd.DataFrame(
@@ -176,13 +177,13 @@ def show_predictions_and_insights(store_nbr, product_family):
             st.pyplot(fig)
 
             st.markdown(
-                """### Main Insights
-
-                - **Recency Effect**: Recent sales data are closely related to the current market conditions, customer preferences, and inventory levels, making them highly relevant for short-term predictions.
-                - **Pattern Recognition**: Machine learning models excel at identifying patterns. Past sales data, especially when structured as lags and rolling means, present clear patterns that models can learn and extrapolate into the future.
-                - **Consumer Behavior**: Purchasing habits tend to be consistent over short periods. By analyzing recent sales, models can predict future behavior based on established trends.
-                - **Impact of External Factors**: While variables like promotions and holidays do impact sales, their effects are often mediated through changes in recent sales patterns, which the model captures through lagged sales features.
-                       """)
+            """
+            ### Main Insights
+            - **Recency Effect**: Recent sales data are closely related to the current market conditions, customer preferences, and inventory levels, making them highly relevant for short-term predictions.
+            - **Pattern Recognition**: Machine learning models excel at identifying patterns. Past sales data, especially when structured as lags and rolling means, present clear patterns that models can learn and extrapolate into the future.
+            - **Consumer Behavior**: Purchasing habits tend to be consistent over short periods. By analyzing recent sales, models can predict future behavior based on established trends.
+            - **Impact of External Factors**: While variables like promotions and holidays do impact sales, their effects are often mediated through changes in recent sales patterns, which the model captures through lagged sales features.
+            """)
 
 
 if __name__ == "__main__":
