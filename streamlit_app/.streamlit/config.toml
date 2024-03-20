@@ -1,0 +1,12 @@
+[theme]
+base="light"
+
+[server]
+maxThreads = 4
+
+[browser]
+gatherUsageStats = false
+
+[global]
+developmentMode = false
+dataCaching = true
