@@ -72,8 +72,11 @@ def predict(initial_date, n_days):
     # Parse the input date
     initial_date = pd.to_datetime(initial_date)
 
-    # Load the saved model
-    model = joblib.load("./models/user_model.pkl")
+    # If the user has trained a model, load the user model, else load the store sales model
+    try:
+        model = joblib.load("./models/user_model.pkl")
+    except FileNotFoundError:
+        model = joblib.load("./models/store_sales_model.pkl")
 
     # Load the test data
     test = read_table("sales_test")

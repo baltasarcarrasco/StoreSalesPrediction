@@ -1,3 +1,4 @@
+import __init__
 from data_ingestion import ingest_data
 from data_processing import process_data
 from model_training import train_model

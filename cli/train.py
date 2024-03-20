@@ -7,7 +7,7 @@ app = Typer()
 @app.command(help="Trains the sales prediction model.")
 def train(
     use_xgbooster: bool = Option(
-        ...,
+        False,
         "--xgboost",
         "-x",
         help="Choose XGBoost as the model. Default is Random Forest.",

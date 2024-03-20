@@ -7,10 +7,12 @@ def plot_predictions():
     """
     This function plots the predictions and actual values.
     """
-    # Load the predictions
-    results_df = read_table("user_sales_predictions")
+    # If table there were no predictions made by the user, read the predictions from the database
+    try:
+        results_df = read_table("user_sales_predictions")
+    except FileNotFoundError:
+        results_df = read_table("sales_predictions")
 
-    print(results_df.head())
     # Aggregate the predictions and actual values by date
     results_df["date"] = pd.to_datetime(results_df["date"])
     results_df = results_df.groupby("date").agg(
