@@ -29,17 +29,17 @@ def create_sidebar_controls():
 
     # Apply changes button with session state handling
     if st.sidebar.button("Apply Changes", key="apply_changes_button"):
-        st.session_state['apply_changes'] = True
+        st.session_state["apply_changes"] = True
     else:
-        if 'apply_changes' not in st.session_state:
+        if "apply_changes" not in st.session_state:
             # Default value before any interactions
-            st.session_state['apply_changes'] = False
+            st.session_state["apply_changes"] = False
 
     # Initialize 'first_load' in session state if not already present
-    if 'first_load' not in st.session_state:
-        st.session_state['first_load'] = True
-    elif st.session_state['apply_changes']:
+    if "first_load" not in st.session_state:
+        st.session_state["first_load"] = True
+    elif st.session_state["apply_changes"]:
         # Reset 'first_load' if 'Apply Changes' is clicked
-        st.session_state['first_load'] = False
+        st.session_state["first_load"] = False
 
     return store_nbr, product_family

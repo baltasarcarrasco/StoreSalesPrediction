@@ -17,10 +17,13 @@ def show_introduction():
 
     # Visuals
     st.markdown("### Project Overview")
-    st.image("streamlit_app/images/corporacion-la-favorita.jpg", caption="Retail Environment at Favorita Stores")
+    st.image(
+        "streamlit_app/images/corporacion-la-favorita.jpg",
+        caption="Retail Environment at Favorita Stores",
+    )
 
-    #st.markdown("### Exploratory Data Analysis Highlights")
-    #st.image("path_to_your_eda_visual.jpg", caption="Sample EDA Visual")
+    # st.markdown("### Exploratory Data Analysis Highlights")
+    # st.image("path_to_your_eda_visual.jpg", caption="Sample EDA Visual")
 
     # App Sections Overview
     st.markdown("### App Sections")
@@ -45,13 +48,11 @@ def show_introduction():
     - **Diego Leon**
     """)
 
-
     st.markdown("""
     We invite you to navigate through the app using the sidebar to explore our data, methodology, model insights, and interactive predictions. Enjoy the journey through data to actionable insights!
     """)
 
 
 # This ensures the function runs when the script is executed directly, useful for testing
-#if __name__ == "__main__":
- #   show_introduction()
-
+# if __name__ == "__main__":
+#   show_introduction()

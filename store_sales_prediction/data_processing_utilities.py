@@ -84,7 +84,7 @@ def prepare_data(df_sales, df_stores, df_holidays, df_oil=None):
 
     # Drop NaNs as they correspond to initial dates
 
-    #df_sales = df_sales.dropna()
+    # df_sales = df_sales.dropna()
 
     return df_sales
 

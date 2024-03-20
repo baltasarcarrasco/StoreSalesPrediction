@@ -33,7 +33,9 @@ def show_eda(store_nbr="All", product_family="All"):
     df_sales_filtered = df_sales.copy()
 
     # Apply filters based on the sidebar selections
-    if st.session_state['apply_changes'] or st.session_state['first_load']:  # Assuming you want to filter on load as well; adjust as needed
+    if (
+        st.session_state["apply_changes"] or st.session_state["first_load"]
+    ):  # Assuming you want to filter on load as well; adjust as needed
         if store_nbr != "All":
             df_sales_filtered = df_sales_filtered[
                 df_sales_filtered["store_nbr"] == store_nbr

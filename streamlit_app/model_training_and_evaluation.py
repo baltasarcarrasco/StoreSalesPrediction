@@ -5,12 +5,10 @@ import seaborn as sns
 from sklearn.metrics import (
     mean_squared_error,
     root_mean_squared_error,
-    mean_absolute_error,
     mean_absolute_percentage_error,
 )
 from store_sales_prediction.db_utilities import read_table
 import numpy as np
-import joblib
 
 
 def load_data():
@@ -54,7 +52,7 @@ def show_model_training_evaluation_page(store_nbr="All", product_family="All"):
     # Merge test data with predictions
     test_merged = pd.merge(test, predictions, on="id")
 
-    if st.session_state['apply_changes'] or st.session_state['first_load']:
+    if st.session_state["apply_changes"] or st.session_state["first_load"]:
         # Adjust for global sidebar control
         filtered_test = test_merged.copy()
         if store_nbr != "All":

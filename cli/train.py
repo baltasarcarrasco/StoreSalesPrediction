@@ -11,7 +11,7 @@ def train(
         "--xgboost",
         "-x",
         help="Choose XGBoost as the model. Default is Random Forest.",
-    )
+    ),
 ):
     """
     Trains the sales prediction model.
