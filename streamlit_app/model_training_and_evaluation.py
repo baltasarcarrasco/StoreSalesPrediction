@@ -35,10 +35,31 @@ def show_model_training_evaluation_page(store_nbr="All", product_family="All"):
         """
     ## Model Training and Evaluation
 
-    This page details our approach to training the sales forecasting model and evaluates the model's performance on the test set. We used an XGBoost regressor model, optimized through grid search cross-validation with a TimeSeriesSplit.
+    This page details our approach to training the sales forecasting model and evaluates the model's performance on the test set. We used an XGBoost regressor model, optimized through grid search TimeSeries cross-validation.
 
-    Below are the main regression metrics from the model evaluation, an interactive plot that compares actual vs. predicted sales, and a bar plot showing RMSE by product family.
+    Below are the main regression metrics from the model evaluation, an interactive plot that compares actual vs. predicted sales on the test set, and a bar plot showing RMSE by product family.
+    
+    **Changes will be applied in the actual vs predicted sales plot after clicking the "Apply Changes" button.**
     """
+    )
+
+    st.markdown("### Parameter Grid")
+    st.code(
+        """
+        #Time series cross-validation
+        tscv = TimeSeriesSplit(n_splits=5)
+
+        #Hyperparameter grid
+        param_grid = {
+            "n_estimators": [50, 100, 200],
+            "max_depth": [3, 5, 7],
+            "learning_rate": [0.01, 0.1, 0.3],
+        }
+
+        #Grid search
+        gsearch = GridSearchCV(estimator=model, cv=tscv, param_grid=param_grid)
+    """,
+        language="python",
     )
 
     # Load the data

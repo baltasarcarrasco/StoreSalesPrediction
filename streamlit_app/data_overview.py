@@ -11,14 +11,22 @@ def show_data_overview():
     # Introduction to the dataset
     st.markdown(
         """
-    Our journey begins with an exploration of the dataset from Corporación Favorita, capturing daily sales across various stores in Ecuador. This dataset not only reflects the purchasing patterns of thousands of products but also illustrates the influence of promotions, store characteristics, and even external factors like holidays and oil prices on sales dynamics.
+    Our journey begins with an exploration of the dataset from Favorita, capturing daily sales across various stores in Ecuador. This dataset not only reflects the purchasing patterns of thousands of products but also illustrates the influence of promotions, store characteristics, and even external factors like holidays on sales dynamics.
 
-    **Key Features**:
-    - **DATE**: The day of sales records, offering insights into daily, weekly, and seasonal trends.
-    - **STORE_NBR**: Identifies the store, enabling analysis of geographical and store-specific patterns.
-    - **FAMILY**: The category of the product, crucial for understanding category-wise sales performance.
-    - **SALES**: The number of units sold, the primary target variable for our forecasting models.
-    - **ONPROMOTION**: Indicates whether the product was on promotion, a significant factor affecting sales.
+    **Sales data features**:
+    - **date**: The day of sales records, offering insights into daily, weekly, and seasonal trends.
+    - **store_nbr**: Identifies the store, enabling analysis of geographical and store-specific patterns.
+    - **family**: The category of the product, crucial for understanding category-wise sales performance.
+    - **sales**: The number of units sold, the primary target variable for our forecasting models.
+    - **onpromotion**: Indicates the number of products of the family that were on promotion that day.
+    
+    **Stores features**:
+    - **`state`**: Indicates the store's location within Ecuador.
+    - **`cluster`**: Defines internal store clusters based on certain characteristics.
+    - **`type`**: Provides an internal categorization of stores.
+    
+    **Holidays:***
+    An **integrated calendar** details all holidays celebrated in Ecuador, including the dates and types of holidays, offering additional insights into potential sales impacts.
     """
     )
 

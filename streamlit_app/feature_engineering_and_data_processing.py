@@ -29,7 +29,7 @@ def show_feature_engineering_page():
     st.code(
         """
 # Sample code snippet from our pipeline
-def prepare_data(df_sales, df_stores, df_holidays, df_oil=None):
+def prepare_data(df_sales, df_stores, df_holidays):
     # Merging, encoding, and creating lagged features...
 
 def encodings(df):
@@ -91,7 +91,7 @@ def encodings(df):
         - **Store Type**: Ordinal Encoding. Different store types (A, B, C, D, E) are encoded with ordinal values reflecting their inherent order or importance.
         - **Holiday Type**: Ordinal Encoding. Holidays are categorized (e.g., No Holiday, Local, Regional, National) and encoded with ordinal values to capture the potential different impacts on sales.
         - **Product Family**: One-Hot Encoding. To capture the uniqueness of each product family without implying any order, one-hot encoding is utilized, creating a binary column for each category.
-        - **Cluster**: Original Encoding Kept. The cluster information, which groups stores based on similar characteristics, is kept as is without additional encoding, assuming it's already in a numerical format suitable for modeling.
+        - **Cluster**: Original Encoding Kept. The cluster information, which groups stores based on similar characteristics, is kept as is without additional encoding, knowing it's already in a numerical format suitable for modeling.
         """
     )
 

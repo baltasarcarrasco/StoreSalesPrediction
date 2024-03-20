@@ -19,7 +19,7 @@ def show_eda(store_nbr="All", product_family="All"):
     st.title("Exploratory Data Analysis")
     st.markdown(
         """
-        This section focuses on exploring the sales distribution and trends over time. Use the sidebar controls to filter the sales data by store number and product family. Changes will be applied after clicking the "Apply Changes" button.
+        This section focuses on exploring the sales distribution and trends over time and its differences by stores characteristics and holidays. Use the sidebar controls to filter the sales data by store number and product family. **Changes will be applied after clicking the "Apply Changes" button.**
     """
     )
     df_sales = read_table("sales")

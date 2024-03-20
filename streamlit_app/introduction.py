@@ -28,13 +28,13 @@ def show_introduction():
     # App Sections Overview
     st.markdown("### App Sections")
     st.markdown("""
-        Navigate through the app using the sidebar to explore:
+        Navigate through the app using the tab explorer at the very top to explore:
         - **Introduction**: A warm welcome and overview of the project.
         - **Data Overview**: Insights into the raw data feeding our analyses.
-        - **Exploratory Data Analysis**: Visual explorations of sales trends, seasonality, and more.
-        - **Feature Engineering and Data Processing**: A look into how we've prepared the data for modeling.
-        - **Model Training and Evaluation**: Our model's performance and the insights we've gathered.
-        - **Predictions and Insights**: Interactive predictions and key findings from our analysis.
+        - **Exploratory Data Analysis *(Interactive)****: Visual explorations of sales trends, differences between stores, holidays, and more.
+        - **Feature Engineering and Data Processing **: A look into how we've prepared the data for modeling.
+        - **Model Training and Evaluation *(Interactive)***: Our model's training characteristics and performance with train and test data.
+        - **Predictions and Insights *(Interactive)***: Interactive predictions and key findings from our model.
         """)
 
     # Introduction to the team
@@ -49,7 +49,7 @@ def show_introduction():
     """)
 
     st.markdown("""
-    We invite you to navigate through the app using the sidebar to explore our data, methodology, model insights, and interactive predictions. Enjoy the journey through data to actionable insights!
+    We invite you to navigate through the app using the tab explorer to take a look into our data, methodology, model insights, and interactive predictions. Enjoy the journey through data to actionable insights!
     """)
 
 
