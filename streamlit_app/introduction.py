@@ -32,7 +32,7 @@ def show_introduction():
         - **Introduction**: A warm welcome and overview of the project.
         - **Data Overview**: Insights into the raw data feeding our analyses.
         - **Exploratory Data Analysis *(Interactive)****: Visual explorations of sales trends, differences between stores, holidays, and more.
-        - **Feature Engineering and Data Processing **: A look into how we've prepared the data for modeling.
+        - **Feature Engineering and Data Processing**: A look into how we've prepared the data for modeling.
         - **Model Training and Evaluation *(Interactive)***: Our model's training characteristics and performance with train and test data.
         - **Predictions and Insights *(Interactive)***: Interactive predictions and key findings from our model.
         """)
