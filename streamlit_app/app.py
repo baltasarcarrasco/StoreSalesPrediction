@@ -5,11 +5,10 @@ from exploratory_data_analysis import show_eda
 from feature_engineering_and_data_processing import show_feature_engineering_page
 from model_training_and_evaluation import show_model_training_evaluation_page
 from predictions_and_insights import show_predictions_and_insights
-# from conclusion import show_conclusion
-from sidebar_controls import create_sidebar_controls  # Step 1
+from sidebar_controls import create_sidebar_controls
 
 # Call the centralized sidebar function to get user input values
-store_nbr, product_family, apply_changes_btn = create_sidebar_controls()  # Step 2
+store_nbr, product_family = create_sidebar_controls()
 
 # Create tabs for each section of the app
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
@@ -25,19 +24,13 @@ with tab2:
     show_data_overview()
 
 with tab3:
-    if apply_changes_btn or not st.session_state:  # Check if the button is pressed or on the first load
-        show_eda(store_nbr, product_family)  # Step 3
+    show_eda(store_nbr, product_family)
 
 with tab4:
     show_feature_engineering_page()
 
 with tab5:
-    if apply_changes_btn or not st.session_state:
-        show_model_training_evaluation_page(store_nbr, product_family)  # Step 3
+    show_model_training_evaluation_page(store_nbr, product_family)
 
 with tab6:
-    if apply_changes_btn or not st.session_state:
-        show_predictions_and_insights(store_nbr, product_family)
-
-# with tab7:
-#     show_conclusion()
+    show_predictions_and_insights(store_nbr, product_family)

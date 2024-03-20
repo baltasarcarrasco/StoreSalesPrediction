@@ -30,9 +30,7 @@ def calculate_metrics(y_true, y_pred):
     return mse, rmse, mae, mape
 
 
-def show_model_training_evaluation_page(
-    store_nbr="All", product_family="All", apply_changes_btn=False
-):
+def show_model_training_evaluation_page(store_nbr="All", product_family="All"):
     st.title("Model Training and Evaluation")
 
     st.markdown(
@@ -56,61 +54,62 @@ def show_model_training_evaluation_page(
     # Merge test data with predictions
     test_merged = pd.merge(test, predictions, on="id")
 
-    # Adjust for global sidebar control
-    filtered_test = test_merged.copy()
-    if store_nbr != "All":
-        filtered_test = filtered_test[filtered_test["store_nbr"] == store_nbr]
-    if product_family != "All":
-        filtered_test = filtered_test[filtered_test["family"] == product_family]
+    if st.session_state['apply_changes'] or st.session_state['first_load']:
+        # Adjust for global sidebar control
+        filtered_test = test_merged.copy()
+        if store_nbr != "All":
+            filtered_test = filtered_test[filtered_test["store_nbr"] == store_nbr]
+        if product_family != "All":
+            filtered_test = filtered_test[filtered_test["family"] == product_family]
 
-    # Display regression metrics using the general_metrics df
-    st.markdown("### Regression Metrics")
-    col1, col2 = st.columns(2)
+        # Display regression metrics using the general_metrics df
+        st.markdown("### Regression Metrics")
+        col1, col2 = st.columns(2)
 
-    with col1:
-        st.markdown("#### Training Set Metrics")
-        for index, row in general_metrics.iterrows():
-            st.write(f"{row['metric'].upper()}: {row['train']:,.2f}")
+        with col1:
+            st.markdown("#### Training Set Metrics")
+            for index, row in general_metrics.iterrows():
+                st.write(f"{row['metric'].upper()}: {row['train']:,.2f}")
 
-    with col2:
-        st.markdown("#### Testing Set Metrics")
-        for index, row in general_metrics.iterrows():
-            st.write(f"{row['metric'].upper()}: {row['test']:,.2f}")
+        with col2:
+            st.markdown("#### Testing Set Metrics")
+            for index, row in general_metrics.iterrows():
+                st.write(f"{row['metric'].upper()}: {row['test']:,.2f}")
 
-    # Plotting actual vs. predicted sales
-    st.markdown("### Actual vs. Predicted Sales")
-    # Aggregate sales by date
-    agg_sales = (
-        filtered_test.groupby("date")
-        .agg(sales_actual=("sales_actual", "sum"), sales_pred=("sales_pred", "sum"))
-        .reset_index()
-    )
+        # Plotting actual vs. predicted sales
+        st.markdown("### Actual vs. Predicted Sales")
+        # Aggregate sales by date
+        agg_sales = (
+            filtered_test.groupby("date")
+            .agg(sales_actual=("sales_actual", "sum"), sales_pred=("sales_pred", "sum"))
+            .reset_index()
+        )
 
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(
-        agg_sales["date"],
-        agg_sales["sales_actual"],
-        label="Actual Sales",
-        color="blue",
-        linestyle="-",
-        linewidth=2,
-    )
-    ax.plot(
-        agg_sales["date"],
-        agg_sales["sales_pred"],
-        label="Predicted Sales",
-        color="red",
-        linestyle="-",
-        linewidth=2,
-    )
-    ax.set_title(
-        f'Actual vs. Predicted Sales {"- Store: " + str(store_nbr) if str(store_nbr) != "All" else ""} {"- Family: " + product_family if product_family != "All" else ""}'
-    )
-    ax.set_xlabel("Date")
-    ax.set_ylabel("Sales")
-    ax.legend()
-    plt.xticks(rotation=45)
-    st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(
+            agg_sales["date"],
+            agg_sales["sales_actual"],
+            label="Actual Sales",
+            color="blue",
+            linestyle="-",
+            linewidth=2,
+        )
+        ax.plot(
+            agg_sales["date"],
+            agg_sales["sales_pred"],
+            label="Predicted Sales",
+            color="red",
+            linestyle="-",
+            linewidth=2,
+        )
+        ax.set_title(
+            f'Actual vs. Predicted Sales {"- Store: " + str(store_nbr) if str(store_nbr) != "All" else ""} {"- Family: " + product_family if product_family != "All" else ""}'
+        )
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Sales")
+        ax.legend()
+        plt.xticks(rotation=45)
+        st.pyplot(fig)
 
     # RMSE by Product Family
     test_merged["rmse"] = (test_merged["sales_actual"] - test_merged["sales_pred"]) ** 2

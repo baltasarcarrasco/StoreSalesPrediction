@@ -6,7 +6,7 @@ import joblib
 from store_sales_prediction.db_utilities import read_table
 from sidebar_controls import create_sidebar_controls
 
-def show_predictions_and_insights(store_nbr, product_family, apply_changes_btn=False):
+def show_predictions_and_insights(store_nbr, product_family):
     st.title("Predictions and Insights")
     st.markdown("""
     This section visualizes both actual sales data for the last 30 days and predicted sales up to December 31, 2017. Use the sidebar controls to filter data by store number and product family.
@@ -47,7 +47,7 @@ def show_predictions_and_insights(store_nbr, product_family, apply_changes_btn=F
 
     prediction_date = pd.to_datetime(prediction_date)
 
-    if apply_changes_btn or True:
+    if st.session_state['apply_changes'] or st.session_state['first_load']:
         # Time series plot
         fig, ax = plt.subplots()
 

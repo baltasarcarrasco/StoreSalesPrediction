@@ -32,7 +32,6 @@ def show_introduction():
         - **Feature Engineering and Data Processing**: A look into how we've prepared the data for modeling.
         - **Model Training and Evaluation**: Our model's performance and the insights we've gathered.
         - **Predictions and Insights**: Interactive predictions and key findings from our analysis.
-        - **Conclusion**: Summarizing the project and outlining future directions.
         """)
 
     # Introduction to the team
