@@ -27,7 +27,19 @@ def create_sidebar_controls():
         key="product_family_selectbox",
     )
 
-    # Apply changes button
-    apply_changes_btn = st.sidebar.button("Apply Changes", key="apply_changes_button")
+    # Apply changes button with session state handling
+    if st.sidebar.button("Apply Changes", key="apply_changes_button"):
+        st.session_state['apply_changes'] = True
+    else:
+        if 'apply_changes' not in st.session_state:
+            # Default value before any interactions
+            st.session_state['apply_changes'] = False
 
-    return store_nbr, product_family, apply_changes_btn
+    # Initialize 'first_load' in session state if not already present
+    if 'first_load' not in st.session_state:
+        st.session_state['first_load'] = True
+    elif st.session_state['apply_changes']:
+        # Reset 'first_load' if 'Apply Changes' is clicked
+        st.session_state['first_load'] = False
+
+    return store_nbr, product_family
