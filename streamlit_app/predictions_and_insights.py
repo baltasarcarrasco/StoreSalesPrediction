@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.dates import AutoDateLocator, AutoDateFormatter
 import seaborn as sns
 import joblib
 from store_sales_prediction.db_utilities import read_table
@@ -121,7 +122,7 @@ def show_predictions_and_insights(store_nbr, product_family):
         # Plotting
         actual_sales["date"] = pd.to_datetime(actual_sales["date"])
         predicted_sales["date"] = pd.to_datetime(predicted_sales["date"])
-
+        days_to_future = (prediction_date - actual_sales_df["date"].max()).days
         sns.lineplot(
             data=actual_sales,
             x="date",
@@ -139,10 +140,16 @@ def show_predictions_and_insights(store_nbr, product_family):
             color="red",
         )
 
-        plt.title("Sales Forecast")
+        plt.title(f"Sales Forecast: {days_to_future} Days Ahead")
         plt.xlabel("Date")
         plt.ylabel("Sales")
         plt.legend()
+        # Adjustments to prevent x-axis overlap
+        plt.xticks(rotation=45, ha='right')  # Rotate labels and align them to the right
+        ax.xaxis.set_major_locator(AutoDateLocator())  # Automatically adjust the date ticks
+        ax.xaxis.set_major_formatter(AutoDateFormatter(ax.xaxis.get_major_locator()))  # Format dates
+
+        plt.tight_layout()  # Automatically adjust subplot params to give specified padding
         st.pyplot(fig)
 
         # Feature importance
