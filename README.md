@@ -64,15 +64,14 @@ The Streamlit app provides an interactive interface for exploring the data and v
 
 - **Introduction**: Gives a brief overview of the project and its objectives.
 - **Data Overview**: Displays the raw data and its characteristics, allowing users to understand the dataset used for modeling.
-- **Exploratory Data Analysis (EDA)**: Offers detailed insights into the sales data, enabling users to explore trends, patterns, and relationships.
+- **Exploratory Data Analysis (EDA)** *(Interactive)*: Offers detailed insights into the sales data, enabling users to explore trends, patterns, and relationships.
 - **Feature Engineering & Data Processing**: Explains the steps taken to prepare the data for modeling, including feature engineering and encoding.
-- **Model Training & Evaluation**: Details the modeling process, including hyperparameter tuning and model evaluation, with metrics to assess the model's performance.
-- **Predictions & Insights**: Enables users to input a future date and visualize the model's sales predictions up to that date, alongside the actual sales data for the last 30 days. This page uses a combination of user input from sidebar controls and a date input widget to filter data and generate predictions.
-- **Conclusions**: (Under Development) This section will summarize the key findings from the exploratory data analysis, feature engineering, model performance, and predictions. It will also discuss the implications of the findings, potential improvements for the model, and future directions for this project.
+- **Model Training & Evaluation** *(Interactive)*: Details the modeling process, including hyperparameter tuning and model evaluation, with metrics to assess the model's performance.
+- **Predictions & Insights** *(Interactive)*: Enables users to input a future date and visualize the model's sales predictions up to that date, alongside the actual sales data for the last 30 days. This page uses a combination of user input from sidebar controls and a date input widget to filter data and generate predictions.
 
-The app also integrates global sidebar controls for filtering data based on store number and product family across different pages, enhancing the user experience and providing consistent analysis criteria throughout the application.
+***Note:*** The app also integrates global sidebar controls for filtering data based on store number and product family across different pages in the *Interactive* pages, enhancing the user experience and providing consistent analysis criteria throughout the application. User changes are reflected upon clicking the "Apply Changes" button in the sidebar.
 
-To run the Streamlit app, navigate to the `streamlit_app` directory and execute the command:
+To run the Streamlit app, execute the command:
 
 ```sh
 streamlit run streamlit_app/app.py
